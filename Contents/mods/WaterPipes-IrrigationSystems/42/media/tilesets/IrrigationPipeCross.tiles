@@ -1,0 +1,7 @@
+tiledef irrigationpipes_01
+{
+    name = IrrigationPipeCross
+    type = object
+    texture = irrigationpipes_01
+    index = 0
+}

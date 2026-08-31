@@ -1,0 +1,9 @@
+name=[B42] Infinite Irrigation Pipes
+icon=icon.png
+poster=infinite_irrigation_pipes.png
+description=No plumbing. No fertilizer. No disease. No pest. No hassle. No Rot. Just grow.
+description=Put one pipe on the ground, and all the surrounding plants will be watered and fertilized automatically.
+id=InfiniteIrrigationPipes-dev
+author=Aragon; Si'rrakx; Modifier:Arg
+pack=infinite_irrigation_pipes
+tiledef=infinite_irrigation_pipe_tiledefinitions 3548

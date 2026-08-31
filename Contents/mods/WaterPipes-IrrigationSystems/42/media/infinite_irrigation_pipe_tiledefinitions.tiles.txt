@@ -1,0 +1,200 @@
+version = 1
+tileset
+{
+    file = infinite_irrigation_pipes_01
+    size = 8,4
+    id = 1
+    // infinite_irrigation_pipes_01_0 through infinite_irrigation_pipes_01_10
+    // are irrigation pipes.  Sprites 11 through 21 repeat the same shapes
+    // with native infinite clean-water properties for supply-capable modes.
+    // Sprites 22 through 25 are north/east/south/west irrigation risers;
+    // 26 through 29 repeat them with native infinite clean-water properties.
+    // All risers omit RenderLayer=Floor for normal world depth sorting.
+    tile
+    {
+        xy = 0,0
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 1,0
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 2,0
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 3,0
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 4,0
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 5,0
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 6,0
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 7,0
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 0,1
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 1,1
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 2,1
+        RenderLayer = Floor
+    }
+    tile
+    {
+        xy = 3,1
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 4,1
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 5,1
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 6,1
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 7,1
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 0,2
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 1,2
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 2,2
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 3,2
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 4,2
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 5,2
+        RenderLayer = Floor
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 6,2
+    }
+    tile
+    {
+        xy = 7,2
+    }
+    tile
+    {
+        xy = 0,3
+    }
+    tile
+    {
+        xy = 1,3
+    }
+    tile
+    {
+        xy = 2,3
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 3,3
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 4,3
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+    tile
+    {
+        xy = 5,3
+        waterAmount = 10000
+        waterMaxAmount = 10000
+        waterPiped =
+    }
+}

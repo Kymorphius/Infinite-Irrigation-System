@@ -1,0 +1,82 @@
+VERSION = 1,
+
+option WaterPipes.IrrigationRange = {
+	type = enum, numValues = 7, default = 2,
+	page = WaterPipes, translation = WaterPipes_IrrigationRange,
+	valueTranslation = WaterPipes_IrrigationRange,
+}
+
+option WaterPipes.ShowCleanup = {
+	type = boolean, default = false,
+	page = WaterPipes, translation = WaterPipes_ShowCleanup,
+}
+
+option WaterPipes.EnableAutoFarming = {
+	type = boolean, default = false,
+	page = WaterPipes, translation = WaterPipes_EnableAutoFarming,
+}
+
+option WaterPipes.CleanupVegetation = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_CleanupVegetation,
+}
+
+option WaterPipes.CleanupTrees = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_CleanupTrees,
+}
+
+option WaterPipes.CleanupZombies = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_CleanupZombies,
+}
+
+option WaterPipes.CleanupCorpses = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_CleanupCorpses,
+}
+
+option WaterPipes.CleanupBlood = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_CleanupBlood,
+}
+
+option WaterPipes.CleanupGroundItems = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_CleanupGroundItems,
+}
+
+option WaterPipes.InfiniteRevive = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_InfiniteRevive,
+}
+
+option WaterPipes.InfiniteReviveToSeeded = {
+	type = boolean, default = false,
+	page = WaterPipes, translation = WaterPipes_InfiniteReviveToSeeded,
+}
+
+option WaterPipes.InfiniteAutoPlow = {
+	type = boolean, default = false,
+	page = WaterPipes, translation = WaterPipes_InfiniteAutoPlow,
+}
+
+option WaterPipes.InfinitePestCare = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_InfinitePestCare,
+}
+
+option WaterPipes.InfiniteCompost = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_InfiniteCompost,
+}
+
+option WaterPipes.InfiniteNoRotten = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_InfiniteNoRotten,
+}
+
+option WaterPipes.InfiniteInstantGrowUp = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_InfiniteInstantGrowUp,
+}

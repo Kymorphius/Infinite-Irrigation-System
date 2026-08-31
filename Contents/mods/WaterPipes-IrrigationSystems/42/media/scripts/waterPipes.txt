@@ -1,0 +1,35 @@
+module WaterPipes
+{
+	imports
+	{
+		Base
+	}
+
+	item WaterPipe
+	{
+		DisplayCategory = Material,
+		Icon = WaterPipe,
+		ItemType = base:normal,
+		UseDelta = 0.1,
+		Weight = 0.00,
+		WorldStaticModel = PlasticPipe,
+	}
+
+	craftRecipe MakeIrrigationPipes
+	{
+		category = Farming,
+        NeedToBeLearn = false,
+		Tags = InHandCraft;CanBeDoneInDark,
+		time = 1,
+		timedAction = Making,
+		inputs
+        {
+			item 1 [Base.RippedSheets],
+		}
+		outputs
+        {
+	            item 16 WaterPipes.WaterPipe,
+        }
+	}
+
+}
