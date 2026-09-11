@@ -24,7 +24,7 @@ module WaterPipes
 		timedAction = Making,
 		inputs
         {
-			item 1 [Base.RippedSheets],
+			item 1 [Base.RippedSheets;Base.RippedSheetsDirty],
 		}
 		outputs
         {
