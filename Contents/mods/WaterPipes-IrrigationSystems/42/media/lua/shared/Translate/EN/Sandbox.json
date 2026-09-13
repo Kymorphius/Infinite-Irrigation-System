@@ -31,5 +31,8 @@
     "Sandbox_WaterPipes_InfinitePestCare": "Infinite pest care without any cost",
     "Sandbox_WaterPipes_InfiniteCompost": "Infinite compost without any cost",
     "Sandbox_WaterPipes_InfiniteNoRotten": "Plants near pipes will live forever and never rot",
-    "Sandbox_WaterPipes_InfiniteInstantGrowUp": "Plants will instantly grow to harvest state (reload required)"
+    "Sandbox_WaterPipes_InfiniteInstantGrowUp": "Plants will instantly grow to harvest state (reload required)",
+    "Sandbox_WaterPipes_FarmlandProtectionGroup": "Farmland Protection",
+    "Sandbox_WaterPipes_PreventFarmlandDestruction": "Farmland cannot be destroyed",
+    "Sandbox_WaterPipes_PreventFarmlandDestruction_tooltip": "Prevents zombies and vehicles from trampling tilled land and its crops. Normal harvesting, decay, and deliberate removal by players are unaffected."
 }

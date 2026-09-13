@@ -31,5 +31,8 @@
     "Sandbox_WaterPipes_InfinitePestCare": "无限护理所有虫害，无需任何成本",
     "Sandbox_WaterPipes_InfiniteCompost": "无限无消耗堆肥，无需任何成本",
     "Sandbox_WaterPipes_InfiniteNoRotten": "管道边的植物将永远活着，永远不腐烂",
-    "Sandbox_WaterPipes_InfiniteInstantGrowUp": "植物将立即成熟到收获状态（重进游戏生效）"
+    "Sandbox_WaterPipes_InfiniteInstantGrowUp": "植物将立即成熟到收获状态（重进游戏生效）",
+    "Sandbox_WaterPipes_FarmlandProtectionGroup": "耕地保护",
+    "Sandbox_WaterPipes_PreventFarmlandDestruction": "耕地不会被破坏",
+    "Sandbox_WaterPipes_PreventFarmlandDestruction_tooltip": "防止僵尸和车辆踩毁已耕作的土地及其作物。正常收获、枯萎和玩家主动铲除不受影响。"
 }

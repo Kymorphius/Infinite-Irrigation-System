@@ -36,6 +36,11 @@ local OPTION_SPECS = {
     { id = "InfiniteCompost", default = true },
     { id = "InfiniteNoRotten", default = true },
     { id = "InfiniteInstantGrowUp", default = true },
+    {
+        id = "PreventFarmlandDestruction", default = false,
+        title = "Sandbox_WaterPipes_FarmlandProtectionGroup",
+        tooltip = "Sandbox_WaterPipes_PreventFarmlandDestruction_tooltip",
+    },
 }
 
 local options = PZAPI.ModOptions:getOptions(MOD_OPTIONS_ID)
@@ -70,7 +75,10 @@ end
 -- Add newly introduced world settings after a Lua reload even if an older
 -- revision already created this Mod Options page.
 for _, spec in ipairs(OPTION_SPECS) do
-    if not options:getOption(spec.id) then addWorldOption(spec) end
+    if not options:getOption(spec.id) then
+        if spec.title then options:addTitle(spec.title) end
+        addWorldOption(spec)
+    end
 end
 
 -- Also covers a Lua reload where the options object was created by an older

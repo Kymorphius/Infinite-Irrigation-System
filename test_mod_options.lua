@@ -159,6 +159,7 @@ SandboxVars = {
         InfiniteCompost = false,
         InfiniteNoRotten = false,
         InfiniteInstantGrowUp = false,
+        PreventFarmlandDestruction = false,
     },
 }
 
@@ -171,8 +172,17 @@ local optionCount = 0
 for _, item in ipairs(options.data) do
     if item.id then optionCount = optionCount + 1 end
 end
-assert(optionCount == 17,
-	"the range selector, fifteen world switches, and local display switch should be shown")
+assert(optionCount == 18,
+	"the range selector, sixteen world switches, and local display switch should be shown")
+assert(options:getOption("PreventFarmlandDestruction"):getValue() == false,
+    "farmland protection should be an explicit opt-in")
+local protectionTitleIndex, protectionOptionIndex
+for index, item in ipairs(options.data) do
+    if item.name == "Sandbox_WaterPipes_FarmlandProtectionGroup" then protectionTitleIndex = index end
+    if item.id == "PreventFarmlandDestruction" then protectionOptionIndex = index end
+end
+assert(protectionTitleIndex and protectionOptionIndex == protectionTitleIndex + 1,
+    "farmland protection should have its own settings group")
 assert(#options:getOption("IrrigationRange").values == 7,
     "the world range selector should expose every supported size through 15x15")
 assert(options:getOption("ShowCleanup"):getValue() == false,

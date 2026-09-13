@@ -16,6 +16,11 @@ option WaterPipes.EnableAutoFarming = {
 	page = WaterPipes, translation = WaterPipes_EnableAutoFarming,
 }
 
+option WaterPipes.PreventFarmlandDestruction = {
+	type = boolean, default = false,
+	page = WaterPipes, translation = WaterPipes_PreventFarmlandDestruction,
+}
+
 option WaterPipes.CleanupVegetation = {
 	type = boolean, default = true,
 	page = WaterPipes, translation = WaterPipes_CleanupVegetation,

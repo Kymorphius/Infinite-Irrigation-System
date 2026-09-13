@@ -31,5 +31,8 @@
     "Sandbox_WaterPipes_InfinitePestCare": "Бесплатно устранять болезни и вредителей растений",
     "Sandbox_WaterPipes_InfiniteCompost": "Бесплатно удобрять растения",
     "Sandbox_WaterPipes_InfiniteNoRotten": "Растения рядом с трубами не погибают и не гниют",
-    "Sandbox_WaterPipes_InfiniteInstantGrowUp": "Мгновенно доводить растения до стадии сбора урожая (требуется перезагрузка мира)"
+    "Sandbox_WaterPipes_InfiniteInstantGrowUp": "Мгновенно доводить растения до стадии сбора урожая (требуется перезагрузка мира)",
+    "Sandbox_WaterPipes_FarmlandProtectionGroup": "Защита пашни",
+    "Sandbox_WaterPipes_PreventFarmlandDestruction": "Пашню нельзя разрушить",
+    "Sandbox_WaterPipes_PreventFarmlandDestruction_tooltip": "Не позволяет зомби и транспорту вытаптывать вспаханную землю и посевы. Обычный сбор урожая, увядание и намеренное удаление игроком не изменяются."
 }
