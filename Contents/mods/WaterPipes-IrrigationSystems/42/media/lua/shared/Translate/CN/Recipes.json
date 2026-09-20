@@ -1,3 +1,12 @@
 {
-    "MakeIrrigationPipes": "制作无限灌溉管道"
+    "MakeIrrigationPipes": "制作无限灌溉管道",
+    "AskMagicFridge": "你为什么不问问白色神奇冰箱",
+    "AskMagicFridgeBlue": "你为什么不问问蓝色神奇冰箱",
+    "AskMagicFridgeGreen": "你为什么不问问绿色神奇冰箱",
+    "AskMagicFridgeIndustrial": "你为什么不问问工业神奇冰箱",
+    "AskMagicFridgeMini": "你为什么不问问迷你神奇冰箱",
+    "AskMagicFridgePlain": "你为什么不问问简约神奇冰箱",
+    "AskMagicFridgeRed": "你为什么不问问红色神奇冰箱",
+    "AskMagicFridgeSteel": "你为什么不问问不锈钢神奇冰箱",
+    "AskMagicFridgeWhiteIndustrial": "你为什么不问问白色工业神奇冰箱"
 }

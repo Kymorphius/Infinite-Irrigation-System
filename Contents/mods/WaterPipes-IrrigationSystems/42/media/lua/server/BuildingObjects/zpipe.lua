@@ -69,6 +69,11 @@ function Pipe:create(x, y, z, north, sprite)
 	if initialMode == "off" and not self.initialPower then initialMode = "irrigation" end
 	local pipeOwner = WaterPipe.getCharacterOwnerId(character)
 	local initialFarmEnabled = initialMode == "irrigation" or initialMode == "both"
+	-- Only farming-capable placement follows the global auto-till setting.
+	-- Without an explicit false, pure water/power pipes interpret nil as
+	-- "follow global" and start tilling unexpectedly.
+	local initialAutoTillOverride = nil
+	if not initialFarmEnabled then initialAutoTillOverride = false end
 
 	if initialMode == "irrigation" then
 		-- The placement preview still uses the editable PNG, but the real world
@@ -95,6 +100,7 @@ function Pipe:create(x, y, z, north, sprite)
 		self.javaObject:getModData()["fertilizeEnabled"] = true;
 		self.javaObject:getModData()["cleanupEnabled"] = false;
 		self.javaObject:getModData()["cleanupShrunkFarmArea"] = false;
+		self.javaObject:getModData()["autoTillOverride"] = initialAutoTillOverride;
 		self.javaObject:getModData()["autoSowEnabled"] = true;
 		self.javaObject:getModData()["autoHarvestEnabled"] = true;
 		self.javaObject:getModData()["autoFarmSettings"] = {};
@@ -119,6 +125,7 @@ function Pipe:create(x, y, z, north, sprite)
 				fertilizeEnabled = initialFarmEnabled,
 				cleanupEnabled = false,
 				cleanupShrunkFarmArea = false,
+				autoTillOverride = initialAutoTillOverride,
 				autoSowEnabled = true,
 				autoHarvestEnabled = true,
 				autoFarmSettings = {},

@@ -33,6 +33,11 @@ local crate = setmetatable({
 	capacity = 50,
 	capacityWeight = 45,
 }, { __index = methods })
+local magicFridge = setmetatable({
+	type = "MagicFridge",
+	capacity = 100,
+	capacityWeight = 999990,
+}, { __index = methods })
 
 assert(pipe:getCapacity() == 10000)
 assert(pipe:getEffectiveCapacity() == 10000)
@@ -43,6 +48,12 @@ assert(pipe:hasRoomFor({ weight = 10, allowed = true,
 	getUnequippedWeight = function(self) return self.weight end }))
 assert(not pipe:hasRoomFor({ weight = 1, allowed = false,
 	getUnequippedWeight = function(self) return self.weight end }))
+
+assert(magicFridge:getCapacity() == 1000000)
+assert(magicFridge:getEffectiveCapacity() == 1000000)
+assert(magicFridge:getMaxWeight() == 1000000)
+assert(magicFridge:hasRoomFor(10))
+assert(not magicFridge:hasRoomFor(11))
 
 assert(crate:getCapacity() == 50)
 assert(crate:getEffectiveCapacity() == 50)

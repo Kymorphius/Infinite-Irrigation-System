@@ -18,6 +18,7 @@ local pipeSprites = readFile(root .. "media/lua/shared/WaterPipe/PipeSprites.lua
 local powerPipe = readFile(root .. "media/lua/shared/WaterPipe/PowerPipe.lua")
 local serverCommands = readFile(root .. "media/lua/server/waterPipesCommands.lua")
 local farmingInfoGuard = readFile(root .. "media/lua/client/WaterPipe/FarmingInfoGuard.lua")
+local autoFarmSettingsUI = readFile(root .. "media/lua/client/WaterPipe/AutoFarmSettingsUI.lua")
 
 assert(not waterPipe:match("[^%w_]print%s*=%s*nop_print"),
     "production code must not replace global print")
@@ -110,6 +111,12 @@ assert(worldPipeMenu:find("ContextMenu_WaterPipe_AutoTillOpen", 1, true)
 		and supplyPipeObject:find("function WaterSupplyPipe.setPlacedAutoTill", 1, true)
 		and waterPipe:find("function WaterPipe.setObjectAutoTill", 1, true),
 	"auto-till must persist independently without restoring irrigation")
+assert(autoFarmSettingsUI:find("ISLootWindowObjectControlHandler_MagicFridgeSettings", 1, true)
+		and autoFarmSettingsUI:find('"setMagicFridgeProduction"', 1, true)
+		and autoFarmSettingsUI:find('"setAllMagicFridgeProduction"', 1, true)
+		and serverCommands:find("function Commands.setMagicFridgeProduction", 1, true)
+		and serverCommands:find("function Commands.setAllMagicFridgeProduction", 1, true),
+	"magic fridges must reuse the native container settings strip with server validation")
 assert(worldPipeMenu:find("ContextMenu_WaterPipe_CareOpen", 1, true)
 		and worldPipeMenu:find("ContextMenu_WaterPipe_FertilizationOpen", 1, true)
 		and worldPipeMenu:find("ContextMenu_WaterPipe_CleanupOpen", 1, true)

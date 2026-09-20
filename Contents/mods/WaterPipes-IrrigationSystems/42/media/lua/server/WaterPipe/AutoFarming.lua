@@ -271,6 +271,22 @@ local function acceptedSeedTypes(props)
 	return props.seedName and { props.seedName } or {}
 end
 
+-- Build 42 has crops such as Tomato and Strawberry whose seedName is the
+-- harvested fruit (used by the manual Extract Seeds recipe), while seedTypes
+-- contains the actual items accepted by the sowing action.  Auto-farming must
+-- replenish an item it can sow again.  Preserve seedName for crops such as
+-- Corn where that item is itself listed as a valid seed.
+function AutoFarming.getHarvestSeedType(props)
+	if type(props) ~= "table" then return nil end
+	local seedTypes = acceptedSeedTypes(props)
+	if props.seedName then
+		for _, seedType in ipairs(seedTypes) do
+			if seedType == props.seedName then return props.seedName end
+		end
+	end
+	return seedTypes[1] or props.seedName
+end
+
 function AutoFarming.chooseCrop(pipe, cache)
 	if not pipe or not cache then return nil end
 	local candidates = {}
@@ -283,6 +299,7 @@ function AutoFarming.chooseCrop(pipe, cache)
 			if (cache.usableCounts[seedType] or 0) > 0 then available = true break end
 		end
 		if setting.enabled and available then
+			local harvestSeedType = AutoFarming.getHarvestSeedType(props)
 			local score = targetDeficitScore(
 				cache, props.vegetableName, setting.produceLimit
 			)
@@ -291,9 +308,9 @@ function AutoFarming.chooseCrop(pipe, cache)
 					cache, props.produceExtra, setting.produceLimit
 				))
 			end
-			if setting.keepSeeds and props.seedName then
+			if setting.keepSeeds and harvestSeedType then
 				score = math.max(score, targetDeficitScore(
-					cache, props.seedName, setting.seedLimit
+					cache, harvestSeedType, setting.seedLimit
 				))
 			end
 			-- Stock targets decide when ripe plants should be harvested, not
@@ -371,11 +388,12 @@ function AutoFarming.tryHarvestPlant(plant, pipe)
 	if not props or not setting.enabled then return false end
 	local cache = AutoFarming.getCache(pipe)
 	if not cache then return false end
+	local harvestSeedType = AutoFarming.getHarvestSeedType(props)
 	local needsProduce = isBelowTarget(cache, props.vegetableName, setting.produceLimit)
 		or (props.produceExtra
 			and isBelowTarget(cache, props.produceExtra, setting.produceLimit))
-	local needsSeeds = plant.hasSeed and setting.keepSeeds and props.seedName
-		and isBelowTarget(cache, props.seedName, setting.seedLimit)
+	local needsSeeds = plant.hasSeed and setting.keepSeeds and harvestSeedType
+		and isBelowTarget(cache, harvestSeedType, setting.seedLimit)
 	-- Do not consume a ripe plant merely to discard every output.  It remains
 	-- harvestable and becomes the next restock source after inventory is removed.
 	if not needsProduce and not needsSeeds then return false end
@@ -391,9 +409,9 @@ function AutoFarming.tryHarvestPlant(plant, pipe)
 			cache, props.produceExtra, numberOfVeg, setting.produceLimit
 		)
 	end
-	if plant.hasSeed and setting.keepSeeds and props.seedName then
+	if plant.hasSeed and setting.keepSeeds and harvestSeedType then
 		local seedCount = math.max(math.floor(numberOfVeg * (props.seedPerVeg or 0.5)), 1)
-		AutoFarming.addTargetBatch(cache, props.seedName, seedCount, setting.seedLimit)
+		AutoFarming.addTargetBatch(cache, harvestSeedType, seedCount, setting.seedLimit)
 	end
 	if owner and SFarmingSystem.instance.gainXp
 		and tonumber(plant.owner) == tonumber(pipe.owner) then

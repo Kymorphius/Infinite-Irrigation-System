@@ -5,6 +5,7 @@ require "ISUI/ISTickBox"
 require "ISUI/ISTextEntryBox"
 require "ISUI/LootWindow/ISLootWindowContainerControls"
 require "ISUI/LootWindow/ISLootWindowObjectControlHandler"
+require "WaterPipe/MagicFridge"
 
 AutoFarmSettingsUI = AutoFarmSettingsUI or {}
 
@@ -83,11 +84,13 @@ function SettingsWindow:drawCropRow(y, item, alt)
 	end
 	local row = item.item
 	local tick = row.enabled and "✓" or "×"
-	local seeds = row.keepSeeds and "✓" or "×"
 	self:drawText(tick, 8, y + 4, row.enabled and 0.35 or 0.85,
 		row.enabled and 0.85 or 0.35, 0.35, 1, UIFont.Small)
 	self:drawText(row.name, 32, y + 4, 0.9, 0.9, 0.9, 1, UIFont.Small)
-	self:drawText(limitText(row.produceLimit), 300, y + 4, 0.9, 0.9, 0.9, 1, UIFont.Small)
+	self:drawText(limitText(row.produceLimit), self.fridgeMode and 505 or 300,
+		y + 4, 0.9, 0.9, 0.9, 1, UIFont.Small)
+	if self.fridgeMode then return y + item.height end
+	local seeds = row.keepSeeds and "✓" or "×"
 	self:drawText(seeds, 420, y + 4, row.keepSeeds and 0.35 or 0.85,
 		row.keepSeeds and 0.85 or 0.35, 0.35, 1, UIFont.Small)
 	self:drawText(limitText(row.seedLimit), 505, y + 4, 0.9, 0.9, 0.9, 1, UIFont.Small)
@@ -116,9 +119,66 @@ local function readLimitEntry(entry)
 	return text == "" and -1 or math.max(0, tonumber(text) or 0)
 end
 
+function SettingsWindow:createFridgeChildren(titleY)
+	self.productionEnabled = newTickBox(PAD, titleY, 240,
+		getText("IGUI_WaterPipe_MagicFridgeProductionEnabled"),
+		self.initialProductionEnabled)
+	self:addChild(self.productionEnabled)
+	local bulkY = titleY + ROW_HGT + 5
+	self.bulkProductEntry = newLimitEntry(320, bulkY, 80)
+	self.bulkProductEntry:setText(tostring(DEFAULT_LIMIT))
+	self:addChild(self.bulkProductEntry)
+	self.bulkProductButton = ISButton:new(410, bulkY, 160, BUTTON_HGT,
+		getText("IGUI_WaterPipe_AutoFarmApplyAll"), self,
+		SettingsWindow.onApplyAllProducts)
+	self.bulkProductButton:initialise()
+	self.bulkProductButton:instantiate()
+	self:addChild(self.bulkProductButton)
+	local headerY = bulkY + BUTTON_HGT + 8
+	self.list = ISScrollingListBox:new(PAD, headerY + 20, self.width - PAD * 2, 255)
+	self.list:initialise()
+	self.list:instantiate()
+	self.list.fridgeMode = true
+	self.list.itemheight = ROW_HGT
+	self.list.font = UIFont.Small
+	self.list.doDrawItem = self.drawCropRow
+	self.list.drawBorder = true
+	self:addChild(self.list)
+	for _, row in ipairs(self.rows) do self.list:addItem(row.name, row) end
+	self.list.selected = #self.rows > 0 and 1 or 0
+	local editY = self.list:getBottom() + PAD
+	self.cropEnabled = newTickBox(PAD, editY, 240,
+		getText("IGUI_WaterPipe_MagicFridgeCropEnabled"), true)
+	self:addChild(self.cropEnabled)
+	local entryY = editY + ROW_HGT + 5
+	self.productEntry = newLimitEntry(500, entryY, 90)
+	self:addChild(self.productEntry)
+	local buttonY = entryY + BUTTON_HGT + PAD
+	self.saveButton = ISButton:new(PAD, buttonY, 120, BUTTON_HGT,
+		getText("IGUI_WaterPipe_AutoFarmSave"), self, SettingsWindow.onSave)
+	self.saveButton:initialise()
+	self.saveButton:instantiate()
+	self:addChild(self.saveButton)
+	self.saveAllButton = ISButton:new(140, buttonY, 250, BUTTON_HGT,
+		getText("IGUI_WaterPipe_MagicFridgeSaveAll"), self,
+		SettingsWindow.onSaveAll)
+	self.saveAllButton:initialise()
+	self.saveAllButton:instantiate()
+	self:addChild(self.saveAllButton)
+	self.cancelButton = ISButton:new(self.width - PAD - 120, buttonY, 120, BUTTON_HGT,
+		getText("IGUI_WaterPipe_AutoFarmCancel"), self, SettingsWindow.onCancel)
+	self.cancelButton:initialise()
+	self.cancelButton:instantiate()
+	self.cancelButton:enableCancelColor()
+	self:addChild(self.cancelButton)
+	self:setHeight(buttonY + BUTTON_HGT + PAD)
+	self:loadSelectedRow()
+end
+
 function SettingsWindow:createChildren()
 	ISCollapsableWindow.createChildren(self)
 	local titleY = self:titleBarHeight() + PAD
+	if self.fridgeMode then return self:createFridgeChildren(titleY) end
 	self.autoSow = newTickBox(PAD, titleY, 220,
 		getText("IGUI_WaterPipe_AutoSow"), self.initialAutoSow)
 	self:addChild(self.autoSow)
@@ -196,6 +256,21 @@ end
 function SettingsWindow:prerender()
 	ISCollapsableWindow.prerender(self)
 	local headerY = self.list.y - 18
+	if self.fridgeMode then
+		self:drawText(getText("IGUI_WaterPipe_MagicFridgeAllProducts"), PAD,
+			self.bulkProductEntry.y + 5, 0.8, 0.8, 0.8, 1, UIFont.Small)
+		self:drawText(getText("IGUI_WaterPipe_AutoFarmCrop"), PAD + 32, headerY,
+			0.8, 0.8, 0.8, 1, UIFont.Small)
+		self:drawText(getText("IGUI_WaterPipe_MagicFridgeProductLimit"), 515, headerY,
+			0.8, 0.8, 0.8, 1, UIFont.Small)
+		self:drawText(getText("IGUI_WaterPipe_MagicFridgeProductTarget"), PAD,
+			self.productEntry.y + 5, 0.8, 0.8, 0.8, 1, UIFont.Small)
+		if self.editingIndex ~= self.list.selected then
+			self:commitSelectedRow()
+			self:loadSelectedRow()
+		end
+		return
+	end
 	self:drawText(getText("IGUI_WaterPipe_AutoFarmAllProducts"), PAD,
 		self.bulkProductEntry.y + 5, 0.8, 0.8, 0.8, 1, UIFont.Small)
 	self:drawText(getText("IGUI_WaterPipe_AutoFarmAllSeeds"), PAD,
@@ -223,8 +298,9 @@ function SettingsWindow:commitSelectedRow()
 	local row = self.editingIndex and self.rows[self.editingIndex] or nil
 	if not row then return end
 	row.enabled = self.cropEnabled:isSelected(1)
-	row.keepSeeds = self.keepSeeds:isSelected(1)
 	row.produceLimit = readLimitEntry(self.productEntry)
+	if self.fridgeMode then return end
+	row.keepSeeds = self.keepSeeds:isSelected(1)
 	row.seedLimit = readLimitEntry(self.seedEntry)
 end
 
@@ -248,25 +324,50 @@ function SettingsWindow:loadSelectedRow()
 	self.editingIndex = row and index or nil
 	if not row then return end
 	self.cropEnabled:setSelected(1, row.enabled)
-	self.keepSeeds:setSelected(1, row.keepSeeds)
 	self.productEntry:setText(row.produceLimit < 0 and "" or tostring(row.produceLimit))
+	if self.fridgeMode then return end
+	self.keepSeeds:setSelected(1, row.keepSeeds)
 	self.seedEntry:setText(row.seedLimit < 0 and "" or tostring(row.seedLimit))
 end
 
-function SettingsWindow:onSave()
+function SettingsWindow:collectSettings()
 	self:commitSelectedRow()
 	local settings = {}
 	for _, row in ipairs(self.rows) do
-		settings[row.cropType] = {
+		local value = {
 			enabled = row.enabled,
 			produceLimit = row.produceLimit,
-			keepSeeds = row.keepSeeds,
-			seedLimit = row.seedLimit,
 		}
+		if not self.fridgeMode then
+			value.keepSeeds = row.keepSeeds
+			value.seedLimit = row.seedLimit
+		end
+		settings[row.cropType] = value
+	end
+	return settings
+end
+
+function SettingsWindow:onSave()
+	local settings = self:collectSettings()
+	if self.fridgeMode then
+		AutoFarmSettingsUI.saveFridge(
+			self.player, self.pipeObject,
+			self.productionEnabled:isSelected(1), settings
+		)
+		self:close()
+		return
 	end
 	AutoFarmSettingsUI.save(
 		self.player, self.pipeObject,
 		self.autoSow:isSelected(1), self.autoHarvest:isSelected(1), settings
+	)
+	self:close()
+end
+
+function SettingsWindow:onSaveAll()
+	AutoFarmSettingsUI.saveAllFridges(
+		self.player, self.pipeObject,
+		self.productionEnabled:isSelected(1), self:collectSettings()
 	)
 	self:close()
 end
@@ -281,16 +382,24 @@ function SettingsWindow:close()
 	if AutoFarmSettingsUI.window == self then AutoFarmSettingsUI.window = nil end
 end
 
-function SettingsWindow:new(player, pipeObject)
+function SettingsWindow:new(player, pipeObject, fridgeMode)
 	local width, height = 620, 540
 	local x = math.max(0, (getCore():getScreenWidth() - width) / 2)
 	local y = math.max(0, (getCore():getScreenHeight() - height) / 2)
 	local o = ISCollapsableWindow.new(self, x, y, width, height)
 	o.player = player
 	o.pipeObject = pipeObject
-	o.title = getText("IGUI_WaterPipe_AutoFarmTitle")
+	o.fridgeMode = fridgeMode == true
+	o.title = getText(fridgeMode and "IGUI_WaterPipe_MagicFridgeSettingsTitle"
+		or "IGUI_WaterPipe_AutoFarmTitle")
 	o.resizable = false
 	local modData = pipeObject:getModData()
+	if fridgeMode then
+		o.initialProductionEnabled = modData.magicFridgeProductionEnabled ~= false
+		o.settings = copySettings(modData.magicFridgeSettings)
+		o.rows = getCropRows(o.settings)
+		return o
+	end
 	o.initialAutoSow = type(modData["autoSowEnabled"]) ~= "boolean"
 		or modData["autoSowEnabled"] == true
 	o.initialAutoHarvest = type(modData["autoHarvestEnabled"]) ~= "boolean"
@@ -325,6 +434,47 @@ function AutoFarmSettingsUI.open(player, pipeObject)
 	if not player or not pipeObject or not pipeObject:getSquare() then return end
 	if AutoFarmSettingsUI.window then AutoFarmSettingsUI.window:close() end
 	local window = SettingsWindow:new(player, pipeObject)
+	window:initialise()
+	window:addToUIManager()
+	AutoFarmSettingsUI.window = window
+end
+
+function AutoFarmSettingsUI.saveFridge(player, object, enabled, settings)
+	if not player or not object or not object:getSquare() then return false end
+	local square = object:getSquare()
+	local sanitized = copySettings(settings)
+	if isClient() then
+		sendClientCommand(player, "WaterPipe", "setMagicFridgeProduction", {
+			x = square:getX(), y = square:getY(), z = square:getZ(),
+			enabled = enabled == true,
+			settings = sanitized,
+		})
+	else
+		MagicFridge.setObjectSettings(object, enabled == true, sanitized)
+	end
+	return true
+end
+
+function AutoFarmSettingsUI.saveAllFridges(player, object, enabled, settings)
+	if not player or not object or not object:getSquare() then return false end
+	local square = object:getSquare()
+	local sanitized = copySettings(settings)
+	if isClient() then
+		sendClientCommand(player, "WaterPipe", "setAllMagicFridgeProduction", {
+			x = square:getX(), y = square:getY(), z = square:getZ(),
+			enabled = enabled == true,
+			settings = sanitized,
+		})
+	else
+		MagicFridge.setAllObjectSettings(enabled == true, sanitized)
+	end
+	return true
+end
+
+function AutoFarmSettingsUI.openFridge(player, object)
+	if not player or not MagicFridge.isObject(object) or not object:getSquare() then return end
+	if AutoFarmSettingsUI.window then AutoFarmSettingsUI.window:close() end
+	local window = SettingsWindow:new(player, object, true)
 	window:initialise()
 	window:addToUIManager()
 	AutoFarmSettingsUI.window = window
@@ -367,5 +517,41 @@ function AutoFarmHandler:new()
 end
 
 ISLootWindowContainerControls.AddHandler(AutoFarmHandler, true)
+
+ISLootWindowObjectControlHandler_MagicFridgeSettings =
+	ISLootWindowObjectControlHandler_MagicFridgeSettings
+	or ISLootWindowObjectControlHandler:derive(
+		"ISLootWindowObjectControlHandler_MagicFridgeSettings")
+local MagicFridgeHandler = ISLootWindowObjectControlHandler_MagicFridgeSettings
+
+function MagicFridgeHandler:shouldBeVisible()
+	return self.container ~= nil and self.container.getType
+		and self.container:getType() == MagicFridge.containerType
+		and MagicFridge.isObject(self.object)
+		and self.object:getSquare() ~= nil
+end
+
+function MagicFridgeHandler:getControl()
+	self.control = self:getButtonControl(
+		getText("IGUI_WaterPipe_MagicFridgeSettingsButton"))
+	return self.control
+end
+
+function MagicFridgeHandler:handleJoypadContextMenu(context)
+	self:addJoypadContextMenuOption(
+		context, getText("IGUI_WaterPipe_MagicFridgeSettingsButton"))
+end
+
+function MagicFridgeHandler:perform()
+	AutoFarmSettingsUI.openFridge(self.playerObj, self.object)
+end
+
+function MagicFridgeHandler:new()
+	local o = ISLootWindowObjectControlHandler.new(self)
+	o.altColor = true
+	return o
+end
+
+ISLootWindowContainerControls.AddHandler(MagicFridgeHandler, true)
 
 return AutoFarmSettingsUI

@@ -1,5 +1,7 @@
 {
     "IGUI_ContainerTitle_InfiniteIrrigationPipe": "无限管道物品栏",
+    "IGUI_ContainerTitle_MagicFridge": "神奇冰箱",
+    "IGUI_CraftingCategories_MagicFridge": "神奇冰箱",
     "IGUI_WaterPipe_NoMorePipe": "没有更多无限管道",
     "IGUI_WaterPipe_EnoughPipeBack": "我得到了足够的无限管道",
     "IGUI_WaterPipe_RecoverPipeProgress": "我得到了一个无限管道，%1 个管道后我就能全部恢复",
@@ -42,5 +44,13 @@
     "IGUI_WaterPipe_AutoFarmSettingsButton": "自动农务设置",
     "IGUI_WaterPipe_AutoFarmUnlimited": "不限",
     "IGUI_WaterPipe_AutoFarmSave": "保存",
-    "IGUI_WaterPipe_AutoFarmCancel": "取消"
+    "IGUI_WaterPipe_AutoFarmCancel": "取消",
+    "IGUI_WaterPipe_MagicFridgeSettingsTitle": "神奇冰箱 · 自动生产",
+    "IGUI_WaterPipe_MagicFridgeProductionEnabled": "自动生产",
+    "IGUI_WaterPipe_MagicFridgeCropEnabled": "允许生产此作物",
+    "IGUI_WaterPipe_MagicFridgeProductLimit": "成品上限",
+    "IGUI_WaterPipe_MagicFridgeProductTarget": "此作物库存上限（留空表示不限）",
+    "IGUI_WaterPipe_MagicFridgeAllProducts": "全部作物库存上限（留空表示不限）",
+    "IGUI_WaterPipe_MagicFridgeSettingsButton": "生产设置",
+    "IGUI_WaterPipe_MagicFridgeSaveAll": "保存全部神奇冰箱"
 }

@@ -15,6 +15,226 @@ module WaterPipes
 		WorldStaticModel = PlasticPipe,
 	}
 
+	item MagicFridge
+	{
+		DisplayCategory = Furniture,
+		Icon = default,
+		ItemType = base:moveable,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		WorldObjectSprite = appliances_refrigeration_01_0,
+	}
+
+	item MagicFridgeBlue
+	{
+		DisplayCategory = Furniture,
+		Icon = default,
+		ItemType = base:moveable,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		WorldObjectSprite = appliances_refrigeration_01_4,
+	}
+
+	item MagicFridgeGreen
+	{
+		DisplayCategory = Furniture,
+		Icon = default,
+		ItemType = base:moveable,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		WorldObjectSprite = appliances_refrigeration_01_12,
+	}
+
+	item MagicFridgeIndustrial
+	{
+		DisplayCategory = Furniture,
+		Icon = default,
+		ItemType = base:moveable,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		WorldObjectSprite = appliances_refrigeration_01_22,
+	}
+
+	item MagicFridgeMini
+	{
+		DisplayCategory = Furniture,
+		Icon = default,
+		ItemType = base:moveable,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		WorldObjectSprite = appliances_refrigeration_01_25,
+	}
+
+	item MagicFridgePlain
+	{
+		DisplayCategory = Furniture,
+		Icon = default,
+		ItemType = base:moveable,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		WorldObjectSprite = appliances_refrigeration_01_28,
+	}
+
+	item MagicFridgeRed
+	{
+		DisplayCategory = Furniture,
+		Icon = default,
+		ItemType = base:moveable,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		WorldObjectSprite = appliances_refrigeration_01_32,
+	}
+
+	item MagicFridgeSteel
+	{
+		DisplayCategory = Furniture,
+		Icon = default,
+		ItemType = base:moveable,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		WorldObjectSprite = appliances_refrigeration_01_8,
+	}
+
+	item MagicFridgeTrailer
+	{
+		DisplayCategory = Furniture,
+		Icon = default,
+		ItemType = base:moveable,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		WorldObjectSprite = location_trailer_02_26,
+	}
+
+	item MagicFridgeWhiteIndustrial
+	{
+		DisplayCategory = Furniture,
+		Icon = default,
+		ItemType = base:moveable,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		WorldObjectSprite = appliances_refrigeration_01_40,
+	}
+
+	item MagicFridgePacked
+	{
+		DisplayCategory = Furniture,
+		Icon = WaterPipe,
+		ItemType = base:container,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		Capacity = 100,
+		WeightReduction = 100,
+		OnCreate = MagicFridge.onCreateItem,
+	}
+
+	item MagicFridgeBluePacked
+	{
+		DisplayCategory = Furniture,
+		Icon = WaterPipe,
+		ItemType = base:container,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		Capacity = 100,
+		WeightReduction = 100,
+		OnCreate = MagicFridge.onCreateItem,
+	}
+
+	item MagicFridgeGreenPacked
+	{
+		DisplayCategory = Furniture,
+		Icon = WaterPipe,
+		ItemType = base:container,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		Capacity = 100,
+		WeightReduction = 100,
+		OnCreate = MagicFridge.onCreateItem,
+	}
+
+	item MagicFridgeIndustrialPacked
+	{
+		DisplayCategory = Furniture,
+		Icon = WaterPipe,
+		ItemType = base:container,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		Capacity = 100,
+		WeightReduction = 100,
+		OnCreate = MagicFridge.onCreateItem,
+	}
+
+	item MagicFridgeMiniPacked
+	{
+		DisplayCategory = Furniture,
+		Icon = WaterPipe,
+		ItemType = base:container,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		Capacity = 100,
+		WeightReduction = 100,
+		OnCreate = MagicFridge.onCreateItem,
+	}
+
+	item MagicFridgePlainPacked
+	{
+		DisplayCategory = Furniture,
+		Icon = WaterPipe,
+		ItemType = base:container,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		Capacity = 100,
+		WeightReduction = 100,
+		OnCreate = MagicFridge.onCreateItem,
+	}
+
+	item MagicFridgeRedPacked
+	{
+		DisplayCategory = Furniture,
+		Icon = WaterPipe,
+		ItemType = base:container,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		Capacity = 100,
+		WeightReduction = 100,
+		OnCreate = MagicFridge.onCreateItem,
+	}
+
+	item MagicFridgeSteelPacked
+	{
+		DisplayCategory = Furniture,
+		Icon = WaterPipe,
+		ItemType = base:container,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		Capacity = 100,
+		WeightReduction = 100,
+		OnCreate = MagicFridge.onCreateItem,
+	}
+
+	item MagicFridgeTrailerPacked
+	{
+		DisplayCategory = Furniture,
+		Icon = WaterPipe,
+		ItemType = base:container,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		Capacity = 100,
+		WeightReduction = 100,
+		OnCreate = MagicFridge.onCreateItem,
+	}
+
+	item MagicFridgeWhiteIndustrialPacked
+	{
+		DisplayCategory = Furniture,
+		Icon = WaterPipe,
+		ItemType = base:container,
+		Tags = base:usedisplayname,
+		Weight = 0.5,
+		Capacity = 100,
+		WeightReduction = 100,
+		OnCreate = MagicFridge.onCreateItem,
+	}
+
 	craftRecipe MakeIrrigationPipes
 	{
 		category = Farming,
@@ -30,6 +250,159 @@ module WaterPipes
         {
 	            item 16 WaterPipes.WaterPipe,
         }
+	}
+
+	craftRecipe AskMagicFridge
+	{
+		category = MagicFridge,
+		NeedToBeLearn = false,
+		Tags = InHandCraft;CanBeDoneInDark,
+		time = 1,
+		timedAction = Making,
+		inputs
+		{
+			item 1 [Base.RippedSheets;Base.RippedSheetsDirty],
+		}
+		outputs
+		{
+			item 1 WaterPipes.MagicFridgePacked,
+		}
+	}
+
+	craftRecipe AskMagicFridgeBlue
+	{
+		category = MagicFridge,
+		NeedToBeLearn = false,
+		Tags = InHandCraft;CanBeDoneInDark,
+		time = 1,
+		timedAction = Making,
+		inputs
+		{
+			item 1 [Base.RippedSheets;Base.RippedSheetsDirty],
+		}
+		outputs
+		{
+			item 1 WaterPipes.MagicFridgeBluePacked,
+		}
+	}
+
+	craftRecipe AskMagicFridgeGreen
+	{
+		category = MagicFridge,
+		NeedToBeLearn = false,
+		Tags = InHandCraft;CanBeDoneInDark,
+		time = 1,
+		timedAction = Making,
+		inputs
+		{
+			item 1 [Base.RippedSheets;Base.RippedSheetsDirty],
+		}
+		outputs
+		{
+			item 1 WaterPipes.MagicFridgeGreenPacked,
+		}
+	}
+
+	craftRecipe AskMagicFridgeIndustrial
+	{
+		category = MagicFridge,
+		NeedToBeLearn = false,
+		Tags = InHandCraft;CanBeDoneInDark,
+		time = 1,
+		timedAction = Making,
+		inputs
+		{
+			item 1 [Base.RippedSheets;Base.RippedSheetsDirty],
+		}
+		outputs
+		{
+			item 1 WaterPipes.MagicFridgeIndustrialPacked,
+		}
+	}
+
+	craftRecipe AskMagicFridgeMini
+	{
+		category = MagicFridge,
+		NeedToBeLearn = false,
+		Tags = InHandCraft;CanBeDoneInDark,
+		time = 1,
+		timedAction = Making,
+		inputs
+		{
+			item 1 [Base.RippedSheets;Base.RippedSheetsDirty],
+		}
+		outputs
+		{
+			item 1 WaterPipes.MagicFridgeMiniPacked,
+		}
+	}
+
+	craftRecipe AskMagicFridgePlain
+	{
+		category = MagicFridge,
+		NeedToBeLearn = false,
+		Tags = InHandCraft;CanBeDoneInDark,
+		time = 1,
+		timedAction = Making,
+		inputs
+		{
+			item 1 [Base.RippedSheets;Base.RippedSheetsDirty],
+		}
+		outputs
+		{
+			item 1 WaterPipes.MagicFridgePlainPacked,
+		}
+	}
+
+	craftRecipe AskMagicFridgeRed
+	{
+		category = MagicFridge,
+		NeedToBeLearn = false,
+		Tags = InHandCraft;CanBeDoneInDark,
+		time = 1,
+		timedAction = Making,
+		inputs
+		{
+			item 1 [Base.RippedSheets;Base.RippedSheetsDirty],
+		}
+		outputs
+		{
+			item 1 WaterPipes.MagicFridgeRedPacked,
+		}
+	}
+
+	craftRecipe AskMagicFridgeSteel
+	{
+		category = MagicFridge,
+		NeedToBeLearn = false,
+		Tags = InHandCraft;CanBeDoneInDark,
+		time = 1,
+		timedAction = Making,
+		inputs
+		{
+			item 1 [Base.RippedSheets;Base.RippedSheetsDirty],
+		}
+		outputs
+		{
+			item 1 WaterPipes.MagicFridgeSteelPacked,
+		}
+	}
+
+	craftRecipe AskMagicFridgeWhiteIndustrial
+	{
+		category = MagicFridge,
+		NeedToBeLearn = false,
+		Tags = InHandCraft;CanBeDoneInDark,
+		time = 1,
+		timedAction = Making,
+		inputs
+		{
+			item 1 [Base.RippedSheets;Base.RippedSheetsDirty],
+		}
+		outputs
+		{
+			item 1 WaterPipes.MagicFridgeWhiteIndustrialPacked,
+		}
 	}
 
 }

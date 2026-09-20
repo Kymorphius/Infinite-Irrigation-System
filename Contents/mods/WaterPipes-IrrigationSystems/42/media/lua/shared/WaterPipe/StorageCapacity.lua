@@ -5,6 +5,10 @@ local StorageCapacity = WaterPipeStorageCapacity
 StorageCapacity.containerType = "InfiniteIrrigationPipe"
 StorageCapacity.logicalCapacity = 10000
 StorageCapacity.physicalCapacity = 100
+StorageCapacity.logicalCapacities = {
+	[StorageCapacity.containerType] = StorageCapacity.logicalCapacity,
+	MagicFridge = 1000000,
+}
 
 local PATCH_KEY = "InfiniteIrrigationPipes_originalHasRoomFor"
 local GET_CAPACITY_KEY = "InfiniteIrrigationPipes_originalGetCapacity"
@@ -24,11 +28,10 @@ local function safeCall(callback, fallback)
 	return fallback
 end
 
-local function isPipeStorage(container)
+local function getLogicalCapacity(container)
 	if not container then return false end
-	return safeCall(function()
-		return container:getType() == StorageCapacity.containerType
-	end, false)
+	local containerType = safeCall(function() return container:getType() end, nil)
+	return StorageCapacity.logicalCapacities[containerType]
 end
 
 local function addedWeight(value)
@@ -81,26 +84,30 @@ function StorageCapacity.install()
 	rawset(methods, SET_CAPACITY_KEY, originalSetCapacity)
 
 	methods.getCapacity = function(container)
-		if isPipeStorage(container) then return StorageCapacity.logicalCapacity end
+		local capacity = getLogicalCapacity(container)
+		if capacity then return capacity end
 		return originalGetCapacity(container)
 	end
 
 	if type(originalGetEffectiveCapacity) == "function" then
 		methods.getEffectiveCapacity = function(container, character)
-			if isPipeStorage(container) then return StorageCapacity.logicalCapacity end
+			local capacity = getLogicalCapacity(container)
+			if capacity then return capacity end
 			return originalGetEffectiveCapacity(container, character)
 		end
 	end
 
 	if type(originalGetMaxWeight) == "function" then
 		methods.getMaxWeight = function(container)
-			if isPipeStorage(container) then return StorageCapacity.logicalCapacity end
+			local capacity = getLogicalCapacity(container)
+			if capacity then return capacity end
 			return originalGetMaxWeight(container)
 		end
 	end
 
 	methods.hasRoomFor = function(container, ...)
-		if not isPipeStorage(container) then
+		local capacity = getLogicalCapacity(container)
+		if not capacity then
 			return originalHasRoomFor(container, ...)
 		end
 
@@ -115,7 +122,7 @@ function StorageCapacity.install()
 			return container:getCapacityWeight()
 		end, nil))
 		if currentWeight == nil then return originalHasRoomFor(container, ...) end
-		return currentWeight + weight <= StorageCapacity.logicalCapacity
+		return currentWeight + weight <= capacity
 	end
 
 	print("[InfiniteIrrigationPipes] Logical pipe storage capacity installed: "

@@ -1,3 +1,23 @@
 {
-    "WaterPipes.WaterPipe": "Бесконечная оросительная труба"
+    "WaterPipes.WaterPipe": "Бесконечная оросительная труба",
+    "WaterPipes.MagicFridge": "Белый волшебный холодильник",
+    "WaterPipes.MagicFridgeBlue": "Синий волшебный холодильник",
+    "WaterPipes.MagicFridgeGreen": "Зелёный волшебный холодильник",
+    "WaterPipes.MagicFridgeIndustrial": "Промышленный волшебный холодильник",
+    "WaterPipes.MagicFridgeMini": "Мини-волшебный холодильник",
+    "WaterPipes.MagicFridgePlain": "Простой волшебный холодильник",
+    "WaterPipes.MagicFridgeRed": "Красный волшебный холодильник",
+    "WaterPipes.MagicFridgeSteel": "Стальной волшебный холодильник",
+    "WaterPipes.MagicFridgeTrailer": "Волшебный холодильник для трейлера",
+    "WaterPipes.MagicFridgeWhiteIndustrial": "Белый промышленный волшебный холодильник",
+    "WaterPipes.MagicFridgePacked": "Белый волшебный холодильник",
+    "WaterPipes.MagicFridgeBluePacked": "Синий волшебный холодильник",
+    "WaterPipes.MagicFridgeGreenPacked": "Зелёный волшебный холодильник",
+    "WaterPipes.MagicFridgeIndustrialPacked": "Промышленный волшебный холодильник",
+    "WaterPipes.MagicFridgeMiniPacked": "Мини-волшебный холодильник",
+    "WaterPipes.MagicFridgePlainPacked": "Простой волшебный холодильник",
+    "WaterPipes.MagicFridgeRedPacked": "Красный волшебный холодильник",
+    "WaterPipes.MagicFridgeSteelPacked": "Стальной волшебный холодильник",
+    "WaterPipes.MagicFridgeTrailerPacked": "Волшебный холодильник для трейлера",
+    "WaterPipes.MagicFridgeWhiteIndustrialPacked": "Белый промышленный волшебный холодильник"
 }

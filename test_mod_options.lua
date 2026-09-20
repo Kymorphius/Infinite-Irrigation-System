@@ -159,6 +159,8 @@ SandboxVars = {
         InfiniteCompost = false,
         InfiniteNoRotten = false,
         InfiniteInstantGrowUp = false,
+        MagicFridgePreserveSeeds = true,
+        MagicFridgeHarvestInterval = 1,
         PreventFarmlandDestruction = false,
     },
 }
@@ -172,8 +174,13 @@ local optionCount = 0
 for _, item in ipairs(options.data) do
     if item.id then optionCount = optionCount + 1 end
 end
-assert(optionCount == 18,
-	"the range selector, sixteen world switches, and local display switch should be shown")
+assert(optionCount == 20,
+	"the two selectors, seventeen world switches, and local display switch should be shown")
+assert(options:getOption("MagicFridgePreserveSeeds"):getValue() == true,
+	"the magic fridge should preserve seeds by default")
+assert(options:getOption("MagicFridgeHarvestInterval"):getValue() == 1
+	and #options:getOption("MagicFridgeHarvestInterval").values == 6,
+	"the magic fridge should default to the ten-minute cycle and expose every interval")
 assert(options:getOption("PreventFarmlandDestruction"):getValue() == false,
     "farmland protection should be an explicit opt-in")
 local protectionTitleIndex, protectionOptionIndex
@@ -221,10 +228,14 @@ assert(SandboxVars.WaterPipes.GroundLayerDisplay == nil,
 
 options:getOption("InfiniteRevive"):setValue(true)
 options:getOption("InfiniteNoRotten"):setValue(true)
+options:getOption("MagicFridgePreserveSeeds"):setValue(false)
+options:getOption("MagicFridgeHarvestInterval"):setValue(3)
 options:getOption("IrrigationRange"):setValue(4)
 options:apply()
 assert(SandboxVars.WaterPipes.InfiniteRevive == true
     and SandboxVars.WaterPipes.InfiniteNoRotten == true
+    and SandboxVars.WaterPipes.MagicFridgePreserveSeeds == false
+    and SandboxVars.WaterPipes.MagicFridgeHarvestInterval == 3
     and SandboxVars.WaterPipes.IrrigationRange == 4,
     "single-player changes should write back to SandboxVars")
 assert(coverageDirtyCalls == 1,

@@ -1,4 +1,7 @@
 {
+    "ContextMenu_MagicFridge_Place": "Place Magic Fridge",
+    "ContextMenu_MagicFridge_PickUp": "Pick Up Magic Fridge",
+    "ContextMenu_MagicFridge_NotEmpty": "Empty the Magic Fridge first.",
     "ContextMenu_WaterPipe_PourWater": "Pour Water",
     "ContextMenu_WaterPipe_OneUse": "1 use (1)",
     "ContextMenu_WaterPipe_SomeUses": "%1 uses (%1)",

@@ -120,6 +120,14 @@ farming_vegetableconf = {
 			minVeg = 1, maxVeg = 1, minVegAutorized = 1, maxVegAutorized = 1,
 			seedPerVeg = 0.5,
 		},
+		Tomato = {
+			vegetableName = "Base.Tomato",
+			seedName = "Base.Tomato",
+			specialSeed = "Base.Tomato",
+			seedTypes = { "Base.TomatoSeed" },
+			minVeg = 1, maxVeg = 1, minVegAutorized = 1, maxVegAutorized = 1,
+			seedPerVeg = 0.5,
+		},
 	},
 	getSpriteName = function() return "crop" end,
 }
@@ -185,6 +193,38 @@ assert(counts["Base.TestProduce"] == 10,
 assert(counts["Base.TestSeed"] == 5,
 	"seed restocking must retain the full harvested batch instead of trimming overflow")
 
+local tomatoHarvest = {
+	x = 11, y = 20, z = 0,
+	typeOfSeed = "Tomato",
+	state = "seeded",
+	hasVegetable = true,
+	hasSeed = true,
+	owner = 0,
+}
+function tomatoHarvest:canHarvest() return true end
+function tomatoHarvest:harvestThis() self.state = "harvested" end
+function tomatoHarvest:getSquare() return pipeSquare end
+assert(WaterPipeAutoFarming.getHarvestSeedType(
+	farming_vegetableconf.props.Tomato
+) == "Base.TomatoSeed",
+	"a special-seed crop must replenish an item accepted by its sowing action")
+assert(WaterPipeAutoFarming.getHarvestSeedType({
+	seedName = "Base.Corn",
+	seedTypes = { "Base.CornSeed", "Base.Corn" },
+}) == "Base.Corn",
+	"a crop whose seedName is directly sowable should preserve that vanilla output")
+assert(WaterPipeAutoFarming.processPlant(tomatoHarvest),
+	"a seed-bearing tomato plant should be auto-harvested")
+counts = {}
+for _, item in ipairs(storedItems) do
+	local fullType = item:getFullType()
+	counts[fullType] = (counts[fullType] or 0) + 1
+end
+assert(counts["Base.Tomato"] == 7,
+	"tomato produce must be added exactly once rather than doubled as fake seed output")
+assert(counts["Base.TomatoSeed"] == 3,
+	"seed-bearing tomatoes must replenish actual sowable TomatoSeed items")
+
 local stockedHarvest = {
 	x = 11, y = 20, z = 0,
 	typeOfSeed = "TestCrop", state = "seeded",
@@ -194,7 +234,7 @@ function stockedHarvest:canHarvest() return true end
 function stockedHarvest:harvestThis() self.state = "harvested" end
 function stockedHarvest:getSquare() return pipeSquare end
 assert(not WaterPipeAutoFarming.processPlant(stockedHarvest)
-	and stockedHarvest.state == "seeded" and xpGained == 1,
+	and stockedHarvest.state == "seeded" and xpGained == 2,
 	"a ripe crop must remain available when both stock targets are already satisfied")
 
 local disabledPipe = {
@@ -202,6 +242,7 @@ local disabledPipe = {
 	autoSowEnabled = true,
 	autoFarmSettings = {
 		TestCrop = { enabled = true, produceLimit = 0, keepSeeds = false, seedLimit = 0 },
+		Tomato = { enabled = false, produceLimit = 9, keepSeeds = true, seedLimit = 9 },
 	},
 }
 assert(WaterPipeAutoFarming.chooseCrop(

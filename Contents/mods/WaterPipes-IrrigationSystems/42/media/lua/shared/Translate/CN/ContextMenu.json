@@ -1,4 +1,7 @@
 {
+    "ContextMenu_MagicFridge_Place": "放置神奇冰箱",
+    "ContextMenu_MagicFridge_PickUp": "收起神奇冰箱",
+    "ContextMenu_MagicFridge_NotEmpty": "请先清空神奇冰箱。",
     "ContextMenu_WaterPipe_PourWater": "浇水",
     "ContextMenu_WaterPipe_OneUse": "1 次使用 (1)",
     "ContextMenu_WaterPipe_SomeUses": "%1 次使用 (%1)",

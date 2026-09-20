@@ -30,8 +30,8 @@ getTexture = function() end
 local originalPrint = print
 dofile("Contents/mods/WaterPipes-IrrigationSystems/42/media/lua/server/WaterPipe.lua")
 assert(print == originalPrint, "WaterPipe.lua must not replace the global print function")
-assert(#Events.EveryOneMinute.handlers == 1 and #Events.EveryTenMinutes.handlers == 2,
-	"plant care and cleanup should stay low-frequency while their queued work uses minute batches")
+assert(#Events.EveryOneMinute.handlers == 1 and #Events.EveryTenMinutes.handlers == 4,
+	"plant care, cleanup, auto-till repair, and storage freshness should stay low-frequency while queued work uses minute batches")
 
 SandboxVars = {
 	WaterPipes = {
@@ -1038,6 +1038,138 @@ WaterPipe.getTimestamp = originalAutoTillTimestamp
 WaterPipe.coverageTimeBudgetMs = 2
 SandboxVars.WaterPipes.InfiniteAutoPlow = false
 
+DestroyedRepairTest = {
+	savedFarmingSystem = SFarmingSystem,
+	savedGetCell = getCell,
+	savedInstanceof = instanceof,
+	square = {},
+	plant = { state = "destroyed", typeOfSeed = "TestCrop" },
+	removed = 0,
+	plowed = 0,
+}
+DestroyedRepairTest.emptyMovingObjects = {
+	size = function() return 0 end,
+	get = function() return nil end,
+}
+DestroyedRepairTest.square.getMovingObjects = function()
+	return DestroyedRepairTest.emptyMovingObjects
+end
+DestroyedRepairTest.square.isVehicleIntersectingCrops = function()
+	return DestroyedRepairTest.vehicleIntersecting == true
+end
+SFarmingSystem = {
+	instance = {
+		getLuaObjectOnSquare = function() return DestroyedRepairTest.plant end,
+		getLuaObjectAt = function() return DestroyedRepairTest.plant end,
+		removePlant = function()
+			DestroyedRepairTest.removed = DestroyedRepairTest.removed + 1
+			if not DestroyedRepairTest.preventRemoval then
+				DestroyedRepairTest.plant = nil
+			end
+		end,
+		plow = function()
+			DestroyedRepairTest.plowed = DestroyedRepairTest.plowed + 1
+			DestroyedRepairTest.plant = {
+				state = "plow", typeOfSeed = "none",
+				objectName = "Farming_Plowed_Land",
+				spriteName = "vegetation_farming_01_1",
+			}
+		end,
+	},
+}
+getCell = function()
+	return { getGridSquare = function(_, x, y)
+		if DestroyedRepairTest.zombieNearby and x == 5 and y == 5 then
+			return DestroyedRepairTest.zombieSquare
+		end
+		return DestroyedRepairTest.square
+	end }
+end
+instanceof = function(object, className)
+	return className == "IsoZombie" and object.isZombie == true
+end
+DestroyedRepairTest.liveZombie = {
+	isZombie = true,
+	isDead = function() return false end,
+}
+DestroyedRepairTest.deadZombie = {
+	isZombie = true,
+	isDead = function() return true end,
+}
+DestroyedRepairTest.nearbyMovingObjects = {
+	size = function() return 1 end,
+	get = function() return DestroyedRepairTest.nearbyZombie end,
+}
+DestroyedRepairTest.zombieSquare = {
+	getMovingObjects = function() return DestroyedRepairTest.nearbyMovingObjects end,
+}
+DestroyedRepairTest.zombieNearby = true
+DestroyedRepairTest.nearbyZombie = DestroyedRepairTest.liveZombie
+assert(not WaterPipe.tryAutoTillPosition(4, 4, 0, true)
+	and DestroyedRepairTest.removed == 0 and DestroyedRepairTest.plowed == 0
+	and DestroyedRepairTest.plant.state == "destroyed",
+	"a live zombie in the surrounding 3x3 area should defer destroyed-field repair")
+DestroyedRepairTest.nearbyZombie = DestroyedRepairTest.deadZombie
+DestroyedRepairTest.vehicleIntersecting = true
+assert(not WaterPipe.tryAutoTillPosition(4, 5, 0, true)
+	and DestroyedRepairTest.removed == 0 and DestroyedRepairTest.plowed == 0
+	and DestroyedRepairTest.plant.state == "destroyed",
+	"a crop-killing vehicle intersecting the field should defer destroyed-field repair")
+DestroyedRepairTest.vehicleIntersecting = false
+assert(WaterPipe.tryAutoTillPosition(4, 5, 0, true)
+	and DestroyedRepairTest.removed == 1 and DestroyedRepairTest.plowed == 1
+	and DestroyedRepairTest.plant.state == "plow",
+	"dead zombies and non-intersecting vehicles should not block replacement of a trampled crop")
+DestroyedRepairTest.zombieNearby = false
+DestroyedRepairTest.plant = { state = "destroyed", typeOfSeed = "TestCrop" }
+DestroyedRepairTest.animal = { isAnimal = true }
+DestroyedRepairTest.square.getMovingObjects = function()
+	return {
+		size = function() return 1 end,
+		get = function() return DestroyedRepairTest.animal end,
+	}
+end
+assert(WaterPipe.tryAutoTillPosition(4, 5, 0, true)
+	and DestroyedRepairTest.removed == 2 and DestroyedRepairTest.plowed == 2
+	and DestroyedRepairTest.plant.state == "plow",
+	"animals should not block repair because vanilla animals do not destroy farming plants")
+DestroyedRepairTest.square.getMovingObjects = function()
+	return DestroyedRepairTest.emptyMovingObjects
+end
+DestroyedRepairTest.plant = { state = "seeded", typeOfSeed = "TestCrop" }
+assert(not WaterPipe.tryAutoTillPosition(4, 5, 0, true)
+	and DestroyedRepairTest.removed == 2 and DestroyedRepairTest.plowed == 2,
+	"auto-till maintenance must preserve living crops")
+DestroyedRepairTest.plant = { state = "destroyed", typeOfSeed = "TestCrop" }
+DestroyedRepairTest.preventRemoval = true
+assert(not WaterPipe.tryAutoTillPosition(4, 5, 0, true)
+	and DestroyedRepairTest.removed == 3 and DestroyedRepairTest.plowed == 2,
+	"a failed destroyed-object removal must not create a duplicate furrow")
+DestroyedRepairTest.preventRemoval = false
+DestroyedRepairTest.plant = nil
+assert(WaterPipe.tryAutoTillPosition(4, 5, 0, true)
+	and DestroyedRepairTest.removed == 3 and DestroyedRepairTest.plowed == 3,
+	"auto-till maintenance should continue repairing genuinely empty covered cells")
+SFarmingSystem = DestroyedRepairTest.savedFarmingSystem
+getCell = DestroyedRepairTest.savedGetCell
+instanceof = DestroyedRepairTest.savedInstanceof
+
+DestroyedRepairTest.savedRequestAutoTill = WaterPipe.requestAutoTillPass
+DestroyedRepairTest.maintenanceRequests = 0
+WaterPipe.requestAutoTillPass = function()
+	DestroyedRepairTest.maintenanceRequests = DestroyedRepairTest.maintenanceRequests + 1
+	return true
+end
+WaterPipe.autoTillPassPending = true
+assert(not WaterPipe.scheduleAutoTillMaintenance()
+	and DestroyedRepairTest.maintenanceRequests == 0,
+	"ten-minute maintenance must not restart an in-progress bounded pass")
+WaterPipe.autoTillPassPending = false
+assert(WaterPipe.scheduleAutoTillMaintenance()
+	and DestroyedRepairTest.maintenanceRequests == 1,
+	"ten-minute maintenance should request a new repair pass when idle")
+WaterPipe.requestAutoTillPass = DestroyedRepairTest.savedRequestAutoTill
+
 local savedFarmingSystemForPlow = SFarmingSystem
 local savedPlantClassForPlow = SPlantGlobalObject
 local savedGetTextForPlow = getText
@@ -1314,11 +1446,19 @@ local presetPipeItem = {}
 presetPipeItem.getContainer = function() return inventory end
 availablePipeItems[presetPipeItem] = true
 local originalCreatePlacedPipe = WaterSupplyPipe.createPlacedPipe
-local presetModeCall = nil
+PlacementDefaultTest = { mode = "both", calls = 0 }
 WaterSupplyPipe.createPlacedPipe = function(targetSquare, mode, pipeType, modData)
-	assert(targetSquare == square and mode == "both" and pipeType == "lineOption")
+	assert(targetSquare == square and mode == PlacementDefaultTest.mode
+		and pipeType == "lineOption")
 	assert(modData.pipeType == "lineOption" and modData.infinite == true)
-	presetModeCall = mode
+	if mode == "irrigation" or mode == "both" then
+		assert(modData.autoTillOverride == nil,
+			"farming-capable placement should follow the global auto-till setting")
+	else
+		assert(modData.autoTillOverride == false,
+			"pure water and power placement must explicitly disable auto-till")
+	end
+	PlacementDefaultTest.calls = PlacementDefaultTest.calls + 1
 	return placedObject
 end
 local presetBuilder = setmetatable({
@@ -1328,10 +1468,38 @@ local presetBuilder = setmetatable({
 	initialMode = "both",
 }, { __index = Pipe })
 assert(presetBuilder:create(3, 4, 0, false, "pipe-sprite") == true
-	and presetModeCall == "both",
+	and PlacementDefaultTest.calls == 1,
 	"the selected initial mode should create its final supply-capable object directly")
 assert(not availablePipeItems[presetPipeItem] and clearedHands[presetPipeItem],
 	"preset placement should consume the same single pipe inventory item")
+
+PlacementDefaultTest.item = { getContainer = function() return inventory end }
+availablePipeItems[PlacementDefaultTest.item] = true
+PlacementDefaultTest.mode = "supply"
+PlacementDefaultTest.builder = setmetatable({
+	character = character,
+	pipeItem = PlacementDefaultTest.item,
+	pipeType = "lineOption",
+	initialMode = "supply",
+	initialPower = false,
+}, { __index = Pipe })
+assert(PlacementDefaultTest.builder:create(3, 4, 0, false, "pipe-sprite") == true
+	and PlacementDefaultTest.calls == 2,
+	"pure water placement should carry an explicit disabled auto-till override")
+
+PlacementDefaultTest.item = { getContainer = function() return inventory end }
+availablePipeItems[PlacementDefaultTest.item] = true
+PlacementDefaultTest.mode = "off"
+PlacementDefaultTest.builder = setmetatable({
+	character = character,
+	pipeItem = PlacementDefaultTest.item,
+	pipeType = "lineOption",
+	initialMode = "off",
+	initialPower = true,
+}, { __index = Pipe })
+assert(PlacementDefaultTest.builder:create(3, 4, 0, false, "pipe-sprite") == true
+	and PlacementDefaultTest.calls == 3,
+	"pure power placement should carry an explicit disabled auto-till override")
 WaterSupplyPipe.createPlacedPipe = originalCreatePlacedPipe
 
 ShrinkCleanupTest = {

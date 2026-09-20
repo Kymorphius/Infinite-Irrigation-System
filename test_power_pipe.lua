@@ -327,4 +327,23 @@ for y = 100, 109 do
 	end
 end
 
+local fridgeSquare = newSquare(82, 80, 0)
+local magicFridge = {
+	getName = function() return "MagicFridge" end,
+	getModData = function() return { magicFridge = true, powerSupplyPipe = true } end,
+	getSquare = function() return fridgeSquare end,
+}
+fridgeSquare:getObjects():add(magicFridge)
+handlers.OnObjectAdded(magicFridge)
+drainDirtyChunks()
+assert(PowerPipe.sources["82,80,0"],
+	"a magic fridge should reuse the native pipe power source")
+handlers.LoadGridsquare(fridgeSquare)
+assert(PowerPipe.sources["82,80,0"],
+	"grid loading must not prune a magic fridge power source")
+handlers.OnObjectAboutToBeRemoved(magicFridge)
+drainDirtyChunks()
+assert(not PowerPipe.sources["82,80,0"],
+	"removing a magic fridge should unregister its power source")
+
 print("PASS test_power_pipe.lua")

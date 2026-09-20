@@ -51,6 +51,7 @@ WaterPipe.autoTillOverridePipeCount = 0
 WaterPipe.autoTillFollowGlobalPipeCount = 0
 WaterPipe.autoTillPositions = {}
 WaterPipe.autoTillPositionCount = 0
+WaterPipe.autoTillZombieSafetyRadius = 1
 WaterPipe.cleanupEnabledPipeCount = 0
 WaterPipe.cleanupPositions = {}
 WaterPipe.cleanupPositionCount = 0
@@ -750,6 +751,7 @@ function WaterPipe.loadPipes()
 	WaterPipe.cleanupPositionCount = 0
 	WaterPipe.cleanupPassPending = false
 	WaterPipe.cleanupProcessing = nil
+	if WaterPipeStorageFreshness then WaterPipeStorageFreshness.reset() end
 	WaterPipe.shrunkFarmCleanupQueue = {}
 	WaterPipe.shrunkFarmCleanupIndex = 1
 	WaterPipe.refreshAutoTillOverridePipeCount()
@@ -2284,7 +2286,59 @@ function WaterPipe.AutoTill.executeTill(square, x, y, z)
     end
 end
 
--- 只处理空地，已经存在植物或耕地对象的位置不会重复翻土。
+local function isLiveZombie(object)
+	if not object or not instanceof then return false end
+	local ok, zombie = pcall(instanceof, object, "IsoZombie")
+	if not ok or zombie ~= true then return false end
+	if object.isDead then
+		local deadOk, dead = pcall(function() return object:isDead() end)
+		if deadOk and dead == true then return false end
+	end
+	return true
+end
+
+function WaterPipe.hasNearbyZombie(x, y, z, radius)
+	local cell = getCell and getCell()
+	if not cell then return false end
+	radius = math.max(0, math.floor(
+		tonumber(radius) or tonumber(WaterPipe.autoTillZombieSafetyRadius) or 1
+	))
+	for dx = -radius, radius do
+		for dy = -radius, radius do
+			local square = cell:getGridSquare(x + dx, y + dy, z)
+			local movingObjects = square and square.getMovingObjects
+				and square:getMovingObjects() or nil
+			if movingObjects and movingObjects.size and movingObjects.get then
+				for i = 0, movingObjects:size() - 1 do
+					if isLiveZombie(movingObjects:get(i)) then return true end
+				end
+			end
+		end
+	end
+	return false
+end
+
+-- In vanilla Build 42.12, dynamic crop destruction comes from two paths:
+-- IsoZombie standing on the crop, and BaseVehicle intersecting the crop unless
+-- that vehicle's script has notKillCrops enabled.  Animals and walking players
+-- do not call the farming-plant destruction path.
+function WaterPipe.hasCropDestroyingVehicle(square)
+	if not square or not square.isVehicleIntersectingCrops then return false end
+	local ok, intersects = pcall(function()
+		return square:isVehicleIntersectingCrops()
+	end)
+	return ok and intersects == true
+end
+
+function WaterPipe.hasNearbyCropDestroyer(x, y, z, square)
+	if WaterPipe.hasNearbyZombie(x, y, z) then return true end
+	return WaterPipe.hasCropDestroyingVehicle(square)
+end
+
+-- Empty covered cells are tilled normally.  Vanilla keeps a trampled crop as
+-- a registered farming object with state="destroyed", so remove that exact
+-- state before re-tilling.  Dead, rotten, harvested, plowed, and living crops
+-- remain untouched.
 function WaterPipe.tryAutoTillPosition(x, y, z, autoTillEnabled)
 	if autoTillEnabled == nil then
 		autoTillEnabled = WaterPipe.getGlobalAutoTillEnabled()
@@ -2297,7 +2351,25 @@ function WaterPipe.tryAutoTillPosition(x, y, z, autoTillEnabled)
 
 	local square = cell:getGridSquare(x, y, z)
 	if not square then return false end
-	if farmingSystem:getLuaObjectOnSquare(square) then return false end
+	local plant = farmingSystem.getLuaObjectOnSquare
+		and farmingSystem:getLuaObjectOnSquare(square) or nil
+	if not plant and farmingSystem.getLuaObjectAt then
+		plant = farmingSystem:getLuaObjectAt(x, y, z)
+	end
+	if plant then
+		if plant.state ~= "destroyed" then return false end
+		if WaterPipe.hasNearbyCropDestroyer(x, y, z, square) then return false end
+		WaterPipe.removeFarmAt(x, y, z, farmingSystem)
+
+		-- Never create a second farming object if another mod prevented the
+		-- destroyed one from being removed.
+		local remaining = farmingSystem.getLuaObjectOnSquare
+			and farmingSystem:getLuaObjectOnSquare(square) or nil
+		if not remaining and farmingSystem.getLuaObjectAt then
+			remaining = farmingSystem:getLuaObjectAt(x, y, z)
+		end
+		if remaining then return false end
+	end
 
 	return WaterPipe.AutoTill.executeTill(square, x, y, z)
 end
@@ -2317,6 +2389,14 @@ function WaterPipe.requestAutoTillPass()
 	WaterPipe.autoTillProcessing = nil
 	WaterPipe.lastAutoTillEnabled = true
 	return true
+end
+
+-- Revisit enabled coverage at the same low frequency as crop care so empty
+-- cells and crops trampled since the previous pass are repaired.  Do not
+-- restart an in-progress bounded pass on large farms.
+function WaterPipe.scheduleAutoTillMaintenance()
+	if WaterPipe.autoTillPassPending then return false end
+	return WaterPipe.requestAutoTillPass()
 end
 
 function WaterPipe.processAutoTillPass()
@@ -2624,15 +2704,21 @@ function WaterPipe.updateAutoTillPass()
 	if WaterPipe.cleanupPassPending then
 		WaterPipe.processCleanupPass()
 	end
+	if WaterPipeStorageFreshness and WaterPipeStorageFreshness.passPending then
+		WaterPipeStorageFreshness.processPass()
+	end
 end
 
 require "WaterPipe/AutoFarming"
+require "WaterPipe/StorageFreshness"
 
 -- 与原版农业系统保持相同的十分钟节奏。植物生长也是在这个事件中推进，
 -- 无需每个游戏分钟重复扫描；新管道仍由 loadPipe 立即护理自己的 3x3 区域。
 Events.EveryOneMinute.Add(WaterPipe.updateAutoTillPass)
 Events.EveryTenMinutes.Add(WaterPipe.checkAndWaterNewPlantsWithCoverage)
 Events.EveryTenMinutes.Add(WaterPipe.scheduleCleanupMaintenance)
+Events.EveryTenMinutes.Add(WaterPipe.scheduleAutoTillMaintenance)
+Events.EveryTenMinutes.Add(WaterPipeStorageFreshness.requestPass)
 
 -- Keep the server registry in sync when a pipe disappears outside the normal
 -- pickup action (sledgehammer, admin removal, map tools, or another mod).

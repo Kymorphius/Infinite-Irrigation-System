@@ -2,6 +2,7 @@ require "WaterPipe"
 require "WaterPipe/PowerPipe"
 require "BuildingObjects/zwaterSupplyPipe"
 require "WaterPipe/WholeBuildingWater"
+require "WaterPipe/MagicFridge"
 
 local Commands = {}
 
@@ -76,6 +77,35 @@ function Commands.pickUpSupply(player, args)
 	local supplyObject = WaterSupplyPipe.findObject(square)
 	if supplyObject then
 		WaterSupplyPipe.onPickUp(supplyObject, player)
+	end
+end
+
+local function getNearbyMagicFridge(player, args)
+	if not player or type(args) ~= "table" then return end
+	local x, y, z = tonumber(args.x), tonumber(args.y), tonumber(args.z)
+	if not x or not y or not z
+		or math.abs(player:getX() - x) > 2
+		or math.abs(player:getY() - y) > 2
+		or math.abs(player:getZ() - z) > 0.1 then return end
+	local square = getCell():getGridSquare(x, y, z)
+	return MagicFridge.findOnSquare(square)
+end
+
+function Commands.pickUpMagicFridge(player, args)
+	local object = getNearbyMagicFridge(player, args)
+	if object then MagicFridge.pickUp(object, player) end
+end
+
+function Commands.setMagicFridgeProduction(player, args)
+	if type(args) ~= "table" or type(args.enabled) ~= "boolean" then return end
+	local object = getNearbyMagicFridge(player, args)
+	if object then MagicFridge.setObjectSettings(object, args.enabled, args.settings) end
+end
+
+function Commands.setAllMagicFridgeProduction(player, args)
+	if type(args) ~= "table" or type(args.enabled) ~= "boolean" then return end
+	if getNearbyMagicFridge(player, args) then
+		MagicFridge.setAllObjectSettings(args.enabled, args.settings)
 	end
 end
 

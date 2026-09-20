@@ -59,6 +59,9 @@ local expectedSupplyObject = {
 	getSquare = function() return "supply-square" end,
 }
 local supplyPickupCalls = 0
+local magicFridgePickupCalls = 0
+local magicFridgeSettingsCalls = 0
+local allMagicFridgeSettingsCalls = 0
 local modeCalls = {}
 WaterSupplyPipe = {
 	findAnyPipeObject = function(square)
@@ -95,6 +98,24 @@ WholeBuildingWater = {
 		table.insert(wholeBuildingWaterModes, enabled)
 	end,
 }
+MagicFridge = {
+	findOnSquare = function(square)
+		if square == "supply-square" then return "magic-fridge" end
+	end,
+	pickUp = function(object, player)
+		assert(object == "magic-fridge" and player ~= nil)
+		magicFridgePickupCalls = magicFridgePickupCalls + 1
+	end,
+	setObjectSettings = function(object, enabled, settings)
+		assert(object == "magic-fridge" and type(enabled) == "boolean"
+			and type(settings) == "table")
+		magicFridgeSettingsCalls = magicFridgeSettingsCalls + 1
+	end,
+	setAllObjectSettings = function(enabled, settings)
+		assert(type(enabled) == "boolean" and type(settings) == "table")
+		allMagicFridgeSettingsCalls = allMagicFridgeSettingsCalls + 1
+	end,
+}
 getCell = function()
     return {
         getGridSquare = function(_, x, y, z)
@@ -108,6 +129,7 @@ package.preload["WaterPipe"] = function() return WaterPipe end
 package.preload["WaterPipe/PowerPipe"] = function() return PowerPipe end
 package.preload["WaterPipe/WholeBuildingWater"] = function() return WholeBuildingWater end
 package.preload["BuildingObjects/zwaterSupplyPipe"] = function() return WaterSupplyPipe end
+package.preload["WaterPipe/MagicFridge"] = function() return MagicFridge end
 package.loaded["WaterPipe"] = nil
 dofile("Contents/mods/WaterPipes-IrrigationSystems/42/media/lua/server/waterPipesCommands.lua")
 
@@ -136,6 +158,29 @@ assert(supplyPickupCalls == 1, "nearby valid supply-pipe pickup should be accept
 
 onClientCommand("WaterPipe", "pickUpSupply", player, { x = 100, y = 200, z = 0 })
 assert(supplyPickupCalls == 1, "remote supply-pipe pickup should be rejected")
+
+onClientCommand("WaterPipe", "pickUpMagicFridge", player, { x = 10, y = 20, z = 0 })
+onClientCommand("WaterPipe", "pickUpMagicFridge", player, { x = 100, y = 200, z = 0 })
+assert(magicFridgePickupCalls == 1,
+	"only a nearby magic-fridge pickup request should be accepted")
+
+onClientCommand("WaterPipe", "setMagicFridgeProduction", player,
+	{ x = 10, y = 20, z = 0, enabled = true, settings = {} })
+onClientCommand("WaterPipe", "setMagicFridgeProduction", player,
+	{ x = 100, y = 200, z = 0, enabled = true, settings = {} })
+onClientCommand("WaterPipe", "setMagicFridgeProduction", player,
+	{ x = 10, y = 20, z = 0, enabled = "yes", settings = {} })
+assert(magicFridgeSettingsCalls == 1,
+	"only nearby well-formed magic-fridge settings should reach the server")
+
+onClientCommand("WaterPipe", "setAllMagicFridgeProduction", player,
+	{ x = 10, y = 20, z = 0, enabled = true, settings = {} })
+onClientCommand("WaterPipe", "setAllMagicFridgeProduction", player,
+	{ x = 100, y = 200, z = 0, enabled = true, settings = {} })
+onClientCommand("WaterPipe", "setAllMagicFridgeProduction", player,
+	{ x = 10, y = 20, z = 0, enabled = "yes", settings = {} })
+assert(allMagicFridgeSettingsCalls == 1,
+	"save-all should require one nearby fridge and well-formed settings")
 
 onClientCommand("WaterPipe", "setPlacedPipeMode", player,
     { x = 10, y = 20, z = 0, mode = "both" })

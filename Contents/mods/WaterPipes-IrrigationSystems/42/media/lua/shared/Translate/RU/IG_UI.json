@@ -1,5 +1,7 @@
 {
     "IGUI_ContainerTitle_InfiniteIrrigationPipe": "Хранилище бесконечной трубы",
+    "IGUI_ContainerTitle_MagicFridge": "Волшебный холодильник",
+    "IGUI_CraftingCategories_MagicFridge": "Волшебные холодильники",
     "IGUI_WaterPipe_WaterAmount": "Воды в бочке: %1",
     "IGUI_WaterPipe_NoMorePipe": "Бесконечные трубы закончились",
     "IGUI_WaterPipe_EnoughPipeBack": "Возвращено достаточно бесконечных труб",
@@ -46,5 +48,13 @@
     "IGUI_WaterPipe_AutoFarmSettingsButton": "Настройки автоматического земледелия",
     "IGUI_WaterPipe_AutoFarmUnlimited": "Без лимита",
     "IGUI_WaterPipe_AutoFarmSave": "Сохранить",
-    "IGUI_WaterPipe_AutoFarmCancel": "Отмена"
+    "IGUI_WaterPipe_AutoFarmCancel": "Отмена",
+    "IGUI_WaterPipe_MagicFridgeSettingsTitle": "Волшебный холодильник · Автопроизводство",
+    "IGUI_WaterPipe_MagicFridgeProductionEnabled": "Автоматическое производство",
+    "IGUI_WaterPipe_MagicFridgeCropEnabled": "Производить эту культуру",
+    "IGUI_WaterPipe_MagicFridgeProductLimit": "Лимит продукции",
+    "IGUI_WaterPipe_MagicFridgeProductTarget": "Лимит запаса этой культуры (пусто = без лимита)",
+    "IGUI_WaterPipe_MagicFridgeAllProducts": "Лимит запаса всех культур (пусто = без лимита)",
+    "IGUI_WaterPipe_MagicFridgeSettingsButton": "Настройки производства",
+    "IGUI_WaterPipe_MagicFridgeSaveAll": "Сохранить для всех волшебных холодильников"
 }

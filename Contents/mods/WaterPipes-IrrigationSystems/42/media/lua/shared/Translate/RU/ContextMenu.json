@@ -1,4 +1,7 @@
 {
+    "ContextMenu_MagicFridge_Place": "Установить волшебный холодильник",
+    "ContextMenu_MagicFridge_PickUp": "Забрать волшебный холодильник",
+    "ContextMenu_MagicFridge_NotEmpty": "Сначала освободите волшебный холодильник.",
     "ContextMenu_WaterPipe_PourWater": "Полить",
     "ContextMenu_WaterPipe_OneUse": "1 использование (1)",
     "ContextMenu_WaterPipe_SomeUses": "%1 использований (%1)",

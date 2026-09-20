@@ -1,5 +1,7 @@
 {
     "IGUI_ContainerTitle_InfiniteIrrigationPipe": "Infinite Pipe Storage",
+    "IGUI_ContainerTitle_MagicFridge": "Magic Fridge",
+    "IGUI_CraftingCategories_MagicFridge": "Magic Fridges",
     "IGUI_WaterPipe_WaterAmount": "barrel water amount = %1",
     "IGUI_WaterPipe_NoMorePipe": "No more pipes",
     "IGUI_WaterPipe_EnoughPipeBack": "I got enough pipes back",
@@ -46,5 +48,13 @@
     "IGUI_WaterPipe_AutoFarmSettingsButton": "Automatic Farming Settings",
     "IGUI_WaterPipe_AutoFarmUnlimited": "Unlimited",
     "IGUI_WaterPipe_AutoFarmSave": "Save",
-    "IGUI_WaterPipe_AutoFarmCancel": "Cancel"
+    "IGUI_WaterPipe_AutoFarmCancel": "Cancel",
+    "IGUI_WaterPipe_MagicFridgeSettingsTitle": "Magic Fridge · Automatic Production",
+    "IGUI_WaterPipe_MagicFridgeProductionEnabled": "Automatic Production",
+    "IGUI_WaterPipe_MagicFridgeCropEnabled": "Produce This Crop",
+    "IGUI_WaterPipe_MagicFridgeProductLimit": "Produce Limit",
+    "IGUI_WaterPipe_MagicFridgeProductTarget": "This Crop's Stock Limit (blank = unlimited)",
+    "IGUI_WaterPipe_MagicFridgeAllProducts": "All Crop Stock Limits (blank = unlimited)",
+    "IGUI_WaterPipe_MagicFridgeSettingsButton": "Production Settings",
+    "IGUI_WaterPipe_MagicFridgeSaveAll": "Save to All Magic Fridges"
 }

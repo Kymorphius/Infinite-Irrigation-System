@@ -1,3 +1,23 @@
 {
-    "WaterPipes.WaterPipe": "无限灌溉管道"
+    "WaterPipes.WaterPipe": "无限灌溉管道",
+    "WaterPipes.MagicFridge": "白色神奇冰箱",
+    "WaterPipes.MagicFridgeBlue": "蓝色神奇冰箱",
+    "WaterPipes.MagicFridgeGreen": "绿色神奇冰箱",
+    "WaterPipes.MagicFridgeIndustrial": "工业神奇冰箱",
+    "WaterPipes.MagicFridgeMini": "迷你神奇冰箱",
+    "WaterPipes.MagicFridgePlain": "简约神奇冰箱",
+    "WaterPipes.MagicFridgeRed": "红色神奇冰箱",
+    "WaterPipes.MagicFridgeSteel": "不锈钢神奇冰箱",
+    "WaterPipes.MagicFridgeTrailer": "拖车神奇冰箱",
+    "WaterPipes.MagicFridgeWhiteIndustrial": "白色工业神奇冰箱",
+    "WaterPipes.MagicFridgePacked": "白色神奇冰箱",
+    "WaterPipes.MagicFridgeBluePacked": "蓝色神奇冰箱",
+    "WaterPipes.MagicFridgeGreenPacked": "绿色神奇冰箱",
+    "WaterPipes.MagicFridgeIndustrialPacked": "工业神奇冰箱",
+    "WaterPipes.MagicFridgeMiniPacked": "迷你神奇冰箱",
+    "WaterPipes.MagicFridgePlainPacked": "简约神奇冰箱",
+    "WaterPipes.MagicFridgeRedPacked": "红色神奇冰箱",
+    "WaterPipes.MagicFridgeSteelPacked": "不锈钢神奇冰箱",
+    "WaterPipes.MagicFridgeTrailerPacked": "拖车神奇冰箱",
+    "WaterPipes.MagicFridgeWhiteIndustrialPacked": "白色工业神奇冰箱"
 }

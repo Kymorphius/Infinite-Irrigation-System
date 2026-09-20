@@ -1,3 +1,23 @@
 {
-    "WaterPipes.WaterPipe": "Infinite Irrigation Pipe"
+    "WaterPipes.WaterPipe": "Infinite Irrigation Pipe",
+    "WaterPipes.MagicFridge": "White Magic Fridge",
+    "WaterPipes.MagicFridgeBlue": "Blue Magic Fridge",
+    "WaterPipes.MagicFridgeGreen": "Green Magic Fridge",
+    "WaterPipes.MagicFridgeIndustrial": "Industrial Magic Fridge",
+    "WaterPipes.MagicFridgeMini": "Mini Magic Fridge",
+    "WaterPipes.MagicFridgePlain": "Plain Magic Fridge",
+    "WaterPipes.MagicFridgeRed": "Red Magic Fridge",
+    "WaterPipes.MagicFridgeSteel": "Steel Magic Fridge",
+    "WaterPipes.MagicFridgeTrailer": "Trailer Magic Fridge",
+    "WaterPipes.MagicFridgeWhiteIndustrial": "White Industrial Magic Fridge",
+    "WaterPipes.MagicFridgePacked": "White Magic Fridge",
+    "WaterPipes.MagicFridgeBluePacked": "Blue Magic Fridge",
+    "WaterPipes.MagicFridgeGreenPacked": "Green Magic Fridge",
+    "WaterPipes.MagicFridgeIndustrialPacked": "Industrial Magic Fridge",
+    "WaterPipes.MagicFridgeMiniPacked": "Mini Magic Fridge",
+    "WaterPipes.MagicFridgePlainPacked": "Plain Magic Fridge",
+    "WaterPipes.MagicFridgeRedPacked": "Red Magic Fridge",
+    "WaterPipes.MagicFridgeSteelPacked": "Steel Magic Fridge",
+    "WaterPipes.MagicFridgeTrailerPacked": "Trailer Magic Fridge",
+    "WaterPipes.MagicFridgeWhiteIndustrialPacked": "White Industrial Magic Fridge"
 }

@@ -37,6 +37,23 @@ local OPTION_SPECS = {
     { id = "InfiniteNoRotten", default = true },
     { id = "InfiniteInstantGrowUp", default = true },
     {
+        id = "MagicFridgePreserveSeeds", default = true,
+        title = "Sandbox_WaterPipes_MagicFridgeGroup",
+        tooltip = "Sandbox_WaterPipes_MagicFridgePreserveSeeds_tooltip",
+    },
+    {
+        id = "MagicFridgeHarvestInterval", default = 1, kind = "combo",
+        tooltip = "Sandbox_WaterPipes_MagicFridgeHarvestInterval_tooltip",
+        choices = {
+            "Sandbox_WaterPipes_MagicFridgeHarvestInterval_option1",
+            "Sandbox_WaterPipes_MagicFridgeHarvestInterval_option2",
+            "Sandbox_WaterPipes_MagicFridgeHarvestInterval_option3",
+            "Sandbox_WaterPipes_MagicFridgeHarvestInterval_option4",
+            "Sandbox_WaterPipes_MagicFridgeHarvestInterval_option5",
+            "Sandbox_WaterPipes_MagicFridgeHarvestInterval_option6",
+        },
+    },
+    {
         id = "PreventFarmlandDestruction", default = false,
         title = "Sandbox_WaterPipes_FarmlandProtectionGroup",
         tooltip = "Sandbox_WaterPipes_PreventFarmlandDestruction_tooltip",

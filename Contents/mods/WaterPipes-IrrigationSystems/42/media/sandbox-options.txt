@@ -85,3 +85,14 @@ option WaterPipes.InfiniteInstantGrowUp = {
 	type = boolean, default = true,
 	page = WaterPipes, translation = WaterPipes_InfiniteInstantGrowUp,
 }
+
+option WaterPipes.MagicFridgePreserveSeeds = {
+	type = boolean, default = true,
+	page = WaterPipes, translation = WaterPipes_MagicFridgePreserveSeeds,
+}
+
+option WaterPipes.MagicFridgeHarvestInterval = {
+	type = enum, numValues = 6, default = 1,
+	page = WaterPipes, translation = WaterPipes_MagicFridgeHarvestInterval,
+	valueTranslation = WaterPipes_MagicFridgeHarvestInterval,
+}

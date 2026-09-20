@@ -624,6 +624,7 @@ local function isPipeObject(object)
 	local name = object:getName()
 	return name == "WaterPipe" or name == "WaterSupplyPipe"
 		or name == "WaterDisabledPipe"
+		or (object.getModData and object:getModData().magicFridge == true)
 end
 
 local function syncSquare(square)
